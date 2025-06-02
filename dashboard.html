@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tournament Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF9F43;
+            --secondary: #FF6B6B;
+            --dark: #1E1E2D;
+            --dark-light: #2A2A3C;
+            --light: #F8F9FA;
+            --success: #28C76F;
+            --info: #00CFE8;
+            --warning: #FF9F43;
+            --danger: #EA5455;
+        }
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        .main-content {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 15px 25px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .user-name {
+            font-weight: 600;
+            margin-left: 10px;
+        }
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .card-title {
+            font-size: 1rem;
+            color: #6C757D;
+            font-weight: 600;
+        }
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+        .card-icon.primary { background-color: var(--primary); }
+        .card-icon.success { background-color: var(--success); }
+        .card-icon.info { background-color: var(--info); }
+        .card-icon.warning { background-color: var(--warning); }
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+        .card-description {
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        .tournament-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .tournament-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        .tournament-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .tournament-banner {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: relative;
+            overflow: hidden;
+        }
+        .tournament-content {
+            padding: 20px;
+        }
+        .tournament-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        .tournament-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            color: #6C757D;
+            font-size: 0.9rem;
+        }
+        .info-item i {
+            margin-right: 5px;
+            color: var(--primary);
+        }
+        .prize-pool {
+            background-color: rgba(255, 159, 67, 0.1);
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            color: var(--primary);
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        @media (max-width: 992px) {
+            .main-content { padding: 10px; }
+            .dashboard-cards { grid-template-columns: 1fr; }
+            .tournament-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <div class="header" style="justify-content:space-between;">
+            <div class="menu-dropdown-container" style="position:relative;display:flex;align-items:center;">
+                <div class="menu-toggle" id="menuToggle" style="cursor:pointer;font-size:1.7rem;color:var(--primary);margin-right:20px;">
+                    <i class="fas fa-bars"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu" style="display:none;position:absolute;top:50px;left:0;z-index:1001;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.08);border-radius:10px;min-width:180px;overflow:hidden;">
+                    <a href="dashboard.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-home" style="margin-right:10px;color:var(--primary);"></i> Dashboard</a>
+                    <a href="leaderboard.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-trophy" style="margin-right:10px;color:var(--primary);"></i> Leaderboard</a>
+                    <a href="tournaments.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-calendar-alt" style="margin-right:10px;color:var(--primary);"></i> Tournaments</a>
+                    <a href="wallet.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-wallet" style="margin-right:10px;color:var(--primary);"></i> Wallet</a>
+                    <a href="profile.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-user" style="margin-right:10px;color:var(--primary);"></i> Profile</a>
+                    <a href="#" id="logoutBtn" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#EA5455;font-weight:500;transition:background 0.2s;"><i class="fas fa-sign-out-alt" style="margin-right:10px;color:#EA5455;"></i> Logout</a>
+                </div>
+            </div>
+            <a href="profile.html" class="user-profile-link" style="display: flex; align-items: center; text-decoration: none;">
+                <div class="user-avatar"><i class="fas fa-user"></i></div>
+                <div class="user-name"></div>
+            </a>
+        </div>
+        <!-- Dashboard Cards -->
+        <div class="dashboard-cards">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Balance</div>
+                    <div class="card-icon primary"><i class="fas fa-wallet"></i></div>
+                </div>
+                <div class="card-value" id="balanceValue">₹0</div>
+                <div class="card-description">Available for tournaments</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Active Tournaments</div>
+                    <div class="card-icon success"><i class="fas fa-trophy"></i></div>
+                </div>
+                <div class="card-value" id="activeTournamentsValue">0</div>
+                <div class="card-description">Currently participating</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Wins</div>
+                    <div class="card-icon info"><i class="fas fa-medal"></i></div>
+                </div>
+                <div class="card-value" id="totalWinsValue">0</div>
+                <div class="card-description">Tournaments won</div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Total Earnings</div>
+                    <div class="card-icon warning"><i class="fas fa-rupee-sign"></i></div>
+                </div>
+                <div class="card-value" id="totalEarningsValue">₹0</div>
+                <div class="card-description">All time winnings</div>
+            </div>
+        </div>
+        <!-- Upcoming Tournaments Section -->
+        <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Upcoming Tournaments</h2>
+        <div class="tournament-grid" id="tournamentGrid">
+            <!-- Tournament cards will be injected here -->
+        </div>
+    </div>
+    <script src="../js/dashboard.js"></script>
+    <script>
+        // Hamburger dropdown menu logic
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        document.addEventListener('click', function(e) {
+            if (menuToggle.contains(e.target)) {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            } else if (!dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+        // Logout logic
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // Clear user session (implement as needed)
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Tournament - Register</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .register-container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #1e1e2d;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .register-container h2 {
+            color: #ff9f43;
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #353535;
+            border-radius: 5px;
+            background-color: #2a2a3c;
+            color: #fff;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: #ff9f43;
+            outline: none;
+        }
+        
+        .register-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff9f43;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .register-btn:hover {
+            background-color: #ff8300;
+        }
+        
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #aaa;
+        }
+        
+        .login-link a {
+            color: #ff9f43;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .social-register {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .social-register p {
+            color: #aaa;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .social-register p::before,
+        .social-register p::after {
+            content: "";
+            position: absolute;
+            height: 1px;
+            width: 30%;
+            background: #353535;
+            top: 50%;
+        }
+
+        .social-register p::before {
+            left: 0;
+        }
+
+        .social-register p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #2a2a3c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 159, 67, 0.3);
+        }
+
+        .social-icon img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <h2>Create Your Account</h2>
+        <form id="registerForm" onsubmit="return handleRegister(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                <div class="error-message" id="username-error">Username must be at least 4 characters</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <div class="error-message" id="email-error">Please enter a valid email</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <div class="error-message" id="password-error">Password must be at least 6 characters</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirm Password</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Confirm your password" required>
+                <div class="error-message" id="confirm-password-error">Passwords do not match</div>
+            </div>
+            
+            <div class="form-group">
+                <label for="game-id">Free Fire ID</label>
+                <input type="text" id="game-id" name="game-id" placeholder="Enter your Free Fire ID" required>
+                <div class="error-message" id="game-id-error">Please enter a valid Free Fire ID</div>
+            </div>
+            
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+        
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login here</a>
+        </div>
+
+        <div class="social-register">
+            <p>Or register with</p>
+            <div class="social-icons">
+                <div class="social-icon" onclick="handleGoogleRegister()">
+                    <!-- Icon fallback if image is missing -->
+                    <span style="font-size: 20px; color: #fff;">G</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/auth.js"></script>
+    <script>
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            // Get form values
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const gameId = document.getElementById('game-id').value;
+            
+            // Simple validation
+            let isValid = true;
+            
+            if (username.length < 4) {
+                document.getElementById('username-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('username-error').style.display = 'none';
+            }
+            
+            if (!email.includes('@') || !email.includes('.')) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('email-error').style.display = 'none';
+            }
+            
+            if (password.length < 6) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('password-error').style.display = 'none';
+            }
+            
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('confirm-password-error').style.display = 'none';
+            }
+            
+            if (gameId.length < 4) {
+                document.getElementById('game-id-error').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('game-id-error').style.display = 'none';
+            }
+            
+            if (isValid) {
+                const result = register({
+                    username,
+                    email,
+                    password,
+                    gameId,
+                    profile: {
+                        gameId,
+                        joinDate: new Date().toISOString()
+                    }
+                });
+
+                if (result.success) {
+                    window.location.href = 'login.html';
+                } else {
+                    document.getElementById('username-error').textContent = result.message;
+                    document.getElementById('username-error').style.display = 'block';
+                }
+            }
+        }
+
+        function handleGoogleRegister() {
+            // This will be implemented after hosting
+            alert('Google Sign-In will be available after hosting');
+        }
+    </script>
+</body>
+</html>

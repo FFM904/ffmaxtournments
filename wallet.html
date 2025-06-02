@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wallet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #FF9F43;
+            --secondary: #FF6B6B;
+            --dark: #1E1E2D;
+            --dark-light: #2A2A3C;
+            --light: #F8F9FA;
+            --success: #28C76F;
+            --info: #00CFE8;
+            --warning: #FF9F43;
+            --danger: #EA5455;
+        }
+        
+        body {
+            background-color: #F5F5F5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+        }
+        
+        /* Wallet Container */
+        .wallet-container {
+            max-width: 900px;
+            margin: 30px auto;
+            display: flex;
+            justify-content: center;
+        }
+        
+        /* Wallet Sidebar */
+        .wallet-sidebar {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            height: fit-content;
+        }
+        
+        .wallet-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .wallet-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .wallet-menu a {
+            display: block;
+            padding: 12px 15px;
+            color: #6C757D;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .wallet-menu a:hover, .wallet-menu a.active {
+            background-color: rgba(255, 159, 67, 0.1);
+            color: var(--primary);
+        }
+        
+        .wallet-menu i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+        }
+        
+        /* Wallet Content */
+        .wallet-content {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 30px;
+            width: 100%;
+            max-width: 700px;
+        }
+        
+        .wallet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #EEE;
+            padding-bottom: 20px;
+        }
+        
+        .wallet-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        /* Balance Card */
+        .balance-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 20px rgba(255, 159, 67, 0.2);
+        }
+        
+        .balance-title {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .balance-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .balance-detail {
+            text-align: center;
+        }
+        
+        .detail-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        /* Withdrawal Section */
+        .withdrawal-section {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .withdrawal-form {
+            background-color: #F8F9FA;
+            border-radius: 10px;
+            padding: 25px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #6C757D;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #DDD;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.2);
+        }
+        
+        .amount-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .amount-option {
+            background-color: white;
+            border: 1px solid #DDD;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .amount-option:hover, .amount-option.active {
+            border-color: var(--primary);
+            background-color: rgba(255, 159, 67, 0.1);
+        }
+        
+        .form-note {
+            font-size: 0.8rem;
+            color: #6C757D;
+            margin-top: 5px;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: #FF8A2B;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #DDD;
+            color: #6C757D;
+            margin-right: 10px;
+        }
+        
+        .btn-outline:hover {
+            background-color: #F8F9FA;
+        }
+        
+        /* Transaction History */
+        .transaction-history {
+            margin-top: 40px;
+        }
+        
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .transaction-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background-color: #F8F9FA;
+            color: #6C757D;
+            font-weight: 600;
+        }
+        
+        .transaction-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #EEE;
+        }
+        
+        .transaction-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-completed {
+            background-color: rgba(40, 199, 111, 0.1);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background-color: rgba(255, 159, 67, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-failed {
+            background-color: rgba(234, 84, 85, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .wallet-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .amount-options {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            }
+            
+            .transaction-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wallet-container">
+        <div class="wallet-content">
+            <div class="wallet-header" style="display:flex;align-items:center;justify-content:space-between;">
+                <div class="menu-dropdown-container" style="position:relative;display:flex;align-items:center;">
+                    <div class="menu-toggle" id="menuToggle" style="cursor:pointer;font-size:1.7rem;color:var(--primary);margin-right:20px;">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                    <div class="dropdown-menu" id="dropdownMenu" style="display:none;position:absolute;top:50px;left:0;z-index:1001;background:white;box-shadow:0 4px 20px rgba(0,0,0,0.08);border-radius:10px;min-width:180px;overflow:hidden;">
+                        <a href="dashboard.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-home" style="margin-right:10px;color:var(--primary);"></i> Dashboard</a>
+                        <a href="leaderboard.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-trophy" style="margin-right:10px;color:var(--primary);"></i> Leaderboard</a>
+                        <a href="tournaments.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-calendar-alt" style="margin-right:10px;color:var(--primary);"></i> Tournaments</a>
+                        <a href="wallet.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-wallet" style="margin-right:10px;color:var(--primary);"></i> Wallet</a>
+                        <a href="profile.html" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#333;font-weight:500;transition:background 0.2s;"><i class="fas fa-user" style="margin-right:10px;color:var(--primary);"></i> Profile</a>
+                        <a href="#" id="logoutBtn" class="dropdown-item" style="display:flex;align-items:center;padding:14px 20px;text-decoration:none;color:#EA5455;font-weight:500;transition:background 0.2s;"><i class="fas fa-sign-out-alt" style="margin-right:10px;color:#EA5455;"></i> Logout</a>
+                    </div>
+                </div>
+                <h1 class="wallet-title" style="margin:0;">My Wallet</h1>
+            </div>
+            
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-title">Total Balance</div>
+                <div class="balance-amount">₹0</div>
+                <div class="balance-details">
+                    <div class="balance-detail">
+                        <div class="detail-label">Winning Amount</div>
+                        <div class="detail-value">₹0</div>
+                    </div>
+                    <div class="balance-detail">
+                        <div class="detail-label">Recharged Amount</div>
+                        <div class="detail-value">₹0</div>
+                    </div>
+                    <div class="balance-detail">
+                        <div class="detail-label">Bonus Amount</div>
+                        <div class="detail-value">₹0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Withdrawal Section -->
+            <div class="withdrawal-section">
+                <h2 class="section-title"><i class="fas fa-rupee-sign"></i> Withdraw Funds</h2>
+                
+                <div class="withdrawal-form">
+                    <div class="form-group">
+                        <label for="withdrawAmount">Amount to Withdraw (₹)</label>
+                        <input type="number" id="withdrawAmount" placeholder="Enter amount between 200 to 5000" min="200" max="5000">
+                        <div class="form-note">Minimum withdrawal: ₹200 | Maximum withdrawal: ₹5000</div>
+                        
+                        <div class="amount-options">
+                            <div class="amount-option" data-amount="200">₹200</div>
+                            <div class="amount-option" data-amount="500">₹500</div>
+                            <div class="amount-option" data-amount="1000">₹1000</div>
+                            <div class="amount-option" data-amount="2000">₹2000</div>
+                            <div class="amount-option" data-amount="5000">₹5000</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="upiId">UPI ID</label>
+                        <input type="text" id="upiId" placeholder="Enter your UPI ID">
+                        <div class="form-note">Amount will be transferred to this UPI ID within 2-3 business days</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="withdrawFrom">Withdraw From</label>
+                        <select id="withdrawFrom">
+                            <option value="winnings">Winning Amount Only (₹0 available)</option>
+                            <option value="bonus">Bonus Amount (₹0 available)</option>
+                        </select>
+                        <div class="form-note">You can only withdraw from your winnings, not from recharged amount</div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-outline">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="submitWithdrawal">Request Withdrawal</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Transaction History -->
+            <div class="transaction-history">
+                <h2 class="section-title"><i class="fas fa-history"></i> Transaction History</h2>
+                
+                <table class="transaction-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Transactions will be added dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Amount option selection
+            const amountOptions = document.querySelectorAll('.amount-option');
+            const withdrawAmountInput = document.getElementById('withdrawAmount');
+            
+            amountOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    amountOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    withdrawAmountInput.value = this.getAttribute('data-amount');
+                });
+            });
+            
+            // Withdrawal validation
+            document.getElementById('submitWithdrawal').addEventListener('click', function() {
+                const amount = parseFloat(withdrawAmountInput.value);
+                const upiId = document.getElementById('upiId').value;
+                const withdrawFrom = document.getElementById('withdrawFrom').value;
+                
+                // Validate amount
+                if (isNaN(amount) || amount < 200 || amount > 5000) {
+                    alert('Please enter a valid amount between ₹200 and ₹5000');
+                    return;
+                }
+                
+                // Validate UPI ID
+                if (!upiId) {
+                    alert('Please enter a valid UPI ID');
+                    return;
+                }
+                
+                // Validate withdrawal source
+                if (withdrawFrom === 'winnings' && amount > 0) {
+                    alert('You have no winnings available for withdrawal');
+                    return;
+                }
+                
+                if (withdrawFrom === 'bonus') {
+                    alert('You have no bonus amount available for withdrawal');
+                    return;
+                }
+                
+                // If all validations pass
+                alert(`Withdrawal request of ₹${amount} submitted successfully!`);
+            });
+            
+            // Disable bonus option since balance is 0
+            document.getElementById('withdrawFrom').options[1].disabled = true;
+        });
+
+        // Hamburger dropdown menu logic
+        const menuToggle = document.getElementById('menuToggle');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        document.addEventListener('click', function(e) {
+            if (menuToggle.contains(e.target)) {
+                dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block';
+            } else if (!dropdownMenu.contains(e.target)) {
+                dropdownMenu.style.display = 'none';
+            }
+        });
+        // Logout logic
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>
